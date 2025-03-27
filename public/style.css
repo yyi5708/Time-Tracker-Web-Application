@@ -1,0 +1,58 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #808080;
+}
+.container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px auto;
+    border: 2.5px solid #000000;
+    border-radius: 2.5px;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+.header {
+    text-align: center;
+    font-size: 50px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+.button {
+    display: block;
+    width: 75%;
+    margin: 20px auto;
+    padding: 20px auto;
+    font-size: 25px;
+    background-color: #00FF00;
+    color: #000000;
+    border: 2.5px solid #000000;
+    border-radius: 2.5px;
+    cursor: pointer;
+    text-align: center;
+}
+.clock {
+    font-size: 25px;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}
+.small-text {
+    font-size: 25px;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}
+.entries {
+    font-size: 25px;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}
+.entry {
+    border: 2.5px solid #000000;
+    border-radius: 2.5px;
+    font-size: 25px;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}

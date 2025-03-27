@@ -1,0 +1,55 @@
+image:
+  name: node:18
+
+variables:
+  CURR_APP: ""
+  PROJECT_NAME: client-yyi5708-react
+  OUTPUT_DIR: public/$PROJECT_NAME
+  URL_APP: $CI_PAGES_URL/$PROJECT_NAME
+
+.script-run-build: &script-run-build |
+  echo "CURR APP:"$CURR_APP
+  #Make sure directory for the app exists
+  if [  ! -d "$CURR_APP" ]; then
+    echo "CURRENT APP not set, or directory does not exist - nothing to build!"
+  else
+    cd $CURR_APP 
+    echo "Create subfolder in gitlab public folder"
+    mkdir ../public/$CURR_APP
+    npm install
+    # Change the auth, since we move to a subfolder.  Otherwise CORS errors
+    sed -i 's|<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />|<link rel="manifest" href="%PUBLIC_URL%/manifest.json" crossorigin="use-credentials" />|g' public/index.html
+    # Add build info.  Must have double quotes this time
+    sed -i "s|</body>|<footer><div style="float:left"><small>Built on GitLab branch <code>$CI_COMMIT_REF_NAME</code> commit <code>$CI_COMMIT_SHORT_SHA</code> $(date)</small></div></footer></body>|g" public/index.html
+    npm run build
+    echo "Copy build folder to gitlab public folder"
+    cp -p -r build/* ../public/$CURR_APP 
+    #echo "Your web page will be at" $CI_PAGES_URL"/"$CURR_APP
+  fi
+  echo "Return to the root directory"
+  cd .. 
+
+cache:
+  paths:
+  - node_modules/
+
+before_script:
+  - pwd
+  - python3 --version
+  - node --version
+
+pages:
+  stage: deploy
+  script:
+    # This magical incantation will inject a build version just before </body>"
+    - CI="" #Ignore warnings.  e.g. unused classes are warnings but will stop build w/o this
+    # Float left on div to place at bottom with react components.  Moved to upper script
+    # - sed -i 's|</body>|<div style="float:left"><small>Built on GitLab branch <code>$CI_COMMIT_REF_NAME</code> commit <code>$CI_COMMIT_SHORT_SHA</code> $(date)</small></div></body>|g' public/index.html
+    - echo "Check current directory"
+    - pwd
+    - CURR_APP=$PROJECT_NAME
+    - *script-run-build 
+    - echo "URL for CLIENT:"$URL_APP
+  artifacts:
+    paths:
+    - public

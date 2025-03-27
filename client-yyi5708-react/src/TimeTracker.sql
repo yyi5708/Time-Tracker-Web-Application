@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS TimeTracker;
+CREATE TABLE TimeTracker (
+  id_number SERIAL PRIMARY KEY,
+  start_time TIME WITHOUT TIME ZONE
+);
